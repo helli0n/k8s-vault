@@ -21,6 +21,8 @@ public class HelloController {
     private String VaultSecretPassword;
     @Value("${vault.secret.othersecret}")
     private String VaultSecretOthersecret;
+    @Value("${configmap.property}")
+    private String ConfigmapProperty;
     @GetMapping("/")
     public String sayHello() {
         long millis = System.currentTimeMillis() - start;
@@ -29,7 +31,7 @@ public class HelloController {
                 TimeUnit.MILLISECONDS.toSeconds(millis) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
 
-        return String.format("Hello, Vault! (up %s, %s, %s, %s)", uptime, VaultSecretUser, VaultSecretPassword, VaultSecretOthersecret);
+        return String.format("Hello, Vault! (up %s, vault.secret.user: %s, vault.secret.password: %s, vault.secret.othersecret: %s, configmap.property: %s)", uptime, VaultSecretUser, VaultSecretPassword, VaultSecretOthersecret, ConfigmapProperty);
     }
 
 }

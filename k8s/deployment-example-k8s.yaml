@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-vault
+  namespace: default
+
+spec:
+  selector:
+    matchLabels:
+      app: hello-vault
+  replicas: 1
+  template:
+    metadata:
+      name: hello-vault
+      labels:
+        app: hello-vault
+    spec:
+      serviceAccountName: vault-auth
+      initContainers:
+        - args:
+            - agent
+            - -config=/etc/vault/vault-agent-config.hcl
+            - -log-level=debug
+          env:
+            - name: VAULT_ADDR
+              value: http://vault-internal:8200
+          image: vault
+          name: vault-agent
+          volumeMounts:
+            - mountPath: /etc/vault
+              name: config
+            - mountPath: /etc/secrets
+              name: shared-data
+
+      containers:
+        - image: hello-vault:1
+          name: hello-vault
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: 'classpath:/,/vault/secrets/'
+          - name: SPRING_PROFILES_ACTIVE
+            value: secret,default
+          ports:
+            - containerPort: 8889
+          volumeMounts:
+            - mountPath: /vault/secrets
+              name: shared-data
+
+      volumes:
+        - configMap:
+            items:
+              - key: vault-agent-config.hcl
+                path: vault-agent-config.hcl
+            name: hello-vault-agent-config
+          name: config
+        - emptyDir: {}
+          name: shared-data
+
