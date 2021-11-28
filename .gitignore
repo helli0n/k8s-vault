@@ -3,8 +3,8 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+!src/main/**/build/
+!src/test/**/build/
 __pycache__/
 
 ### STS ###
@@ -22,8 +22,9 @@ __pycache__/
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+!src/main/**/out/
+!src/test/**/out/
+.DS_Store
 
 ### NetBeans ###
 /nbproject/private/
