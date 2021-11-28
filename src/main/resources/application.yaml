@@ -1,0 +1,6 @@
+server:
+  port: 8889
+
+vault.secret.user: users12331
+vault.secret.password: password123
+vault.secret.othersecret: othersecret123
